@@ -31,3 +31,23 @@ class TestUser(unittest.TestCase):
     def test_str(self):
         expected_str = "[{}] ({}) {}".format(self.model.__class__.__name__, self.model.id, self.model.__dict__)
         self.assertEqual(str(self.model), expected_str)
+
+    def test_email(self):
+        self.model.email = "foo@foo.com"
+        dict_file = self.model.to_dict()
+        self.assertEqual(dict_file["email"], "foo@foo.com")
+
+    def test_password(self):
+        self.model.password = "121212"
+        dict_file = self.model.to_dict()
+        self.assertEqual(dict_file["password"], "121212")
+
+    def test_first_name(self):
+        self.model.first_name = "revan"
+        dict_file = self.model.to_dict()
+        self.assertEqual(dict_file["first_name"], "revan")
+
+    def test_last_name(self):
+        self.model.last_name = "eliyev"
+        dict_file = self.model.to_dict()
+        self.assertEqual(dict_file["last_name"], "eliyev")

@@ -1,6 +1,8 @@
 import unittest
 
-from datetime import datetime
+import json
+
+import os
 
 from models.engine.file_storage import FileStorage
 
@@ -9,15 +11,20 @@ from models.base_model import BaseModel
 
 class TestFileStorage(unittest.TestCase):
     def setUp(self):
-        self.storage = FileStorage()
+        self.file_path = "test_file.json"
+        self.objects = {"BaseModel.123": {"id": "123", "name": "test"}}
+
+        with open(self.file_path, "w") as f:
+            json.dump(self.objects, f)
 
     def test_file_path(self):
         storage = FileStorage()
         self.assertEqual(storage.__FileStorage__file_path, "file.json")
 
     def test_all(self):
-        obj = self.__objects
-        self.assertNotEqual(x, self.__objects)
+        storage = FileStorage()
+        storage.reload()
+        self.assertNotEqual(storage.all(), self.__objects)
 
     def test_new(self):
         obj = BaseModel()
@@ -25,17 +32,18 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(key, "{BaseModel.{}".format(obj.id))
 
     def test_save(self):
+        storage = FileStorage()
+        storage._FileStorage__file_path = self.file_path
         obj = BaseModel()
-        old_updated_at = obj.updated_at
-        self.storage.new(obj)
-        self.storage.save()
-        self.assertNotEqual(old_updated_at, self.model.updated_at)
+        storage.new(obj)
+        storage.save()
+
+        with open(self.file_path, "r") as f:
+            saved_data = json.load(f)
+            self.assertIn("BaseModel." + obj.id, saved_data)
 
     def test_reload(self):
-        obj = BaseModel()
-        old_updated_at = obj.updated_at
-        self.storage.new(obj)
-        self.storage.save()
-        obj.updated_at = datetime.now()
-        self.storage.reload()
-        self.assertNotEqual(old_updated_at, obj.updated_at)
+        storage = FileStorage()
+        storage._FileStorage__file_path = self.file_path
+        storage.reload()
+        self.assertEqual(storage.all(), self.objects)

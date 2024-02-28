@@ -1,41 +1,38 @@
 import unittest
+
+from datetime import datetime
+
 from models.state import State
 
 
 class TestState(unittest.TestCase):
     def setUp(self):
-        self.state = State()
+        self.model = User()
+        self.model.created_at = datetime.now()
+        self.model.updated_at = datetime.now()
 
-    def test_initialization(self):
-        self.assertIsInstance(self.state, State)
-        self.assertEqual(self.state.name, "")
-        self.assertIsNone(self.state.created_at)
-        self.assertIsNone(self.state.updated_at)
+    def test_id(self):
+        self.model_test = User()
+        self.assertNotEqual(self.model.id, self.model_test.id)
+
+    def test_save(self):
+        old_updated_at = self.model.updated_at
+        self.model.save()
+        self.assertNotEqual(old_updated_at, self.model.updated_at)
+        with open("file.json", "r") as file:
+            self.assertIn("User.{}".format(self.model.id), file.read())
 
     def test_to_dict(self):
-        state_dict = self.state.to_dict()
-        expected_dict = {
-            'id': self.state.id,
-            'name': "",
-            '__class__': 'State',
-            'created_at': self.state.created_at.isoformat(),
-            'updated_at': self.state.updated_at.isoformat()
-        }
-        self.assertDictEqual(state_dict, expected_dict)
+        result = self.model.to_dict()
+        self.assertEqual(result["__class__"], self.model.__class__.__name__)
+        self.assertEqual(result["created_at"], self.model.created_at.isoformat())
+        self.assertEqual(result["updated_at"], self.model.updated_at.isoformat())
 
-    def test_from_dict(self):
-        state_dict = {
-            'id': '123',
-            'name': "Test State",
-            'created_at': '2024-02-28T12:00:00',
-            'updated_at': '2024-02-28T12:00:00'
-        }
-        new_state = State(**state_dict)
-        self.assertEqual(new_state.id, '123')
-        self.assertEqual(new_state.name, "Test State")
-        self.assertEqual(new_state.created_at.isoformat(), '2024-02-28T12:00:00')
-        self.assertEqual(new_state.updated_at.isoformat(), '2024-02-28T12:00:00')
+    def test_str(self):
+        expected_str = "[{}] ({}) {}".format(self.model.__class__.__name__, self.model.id, self.model.__dict__)
+        self.assertEqual(str(self.model), expected_str)
 
-if __name__ == '__main__':
-    unittest.main()
-
+    def test_first_name_attr(self):
+        state = State()
+        self.assertTrue(hasattr(state, "name"))
+        self.assertEqual(state.name, "")

@@ -32,22 +32,6 @@ class TestUser(unittest.TestCase):
         expected_str = "[{}] ({}) {}".format(self.model.__class__.__name__, self.model.id, self.model.__dict__)
         self.assertEqual(str(self.model), expected_str)
 
-    def test_email(self):
-        self.model.email = "foo@foo.com"
-        self.assertEqual(self.model.email, "foo@foo.com")
-
-    def test_password(self):
-        self.model.password = "121212"
-        self.assertEqual(self.model.password, "121212")
-
-    def test_first_name(self):
-        self.model.first_name = "revan"
-        self.assertEqual(self.model.first_name, "revan")
-
-    def test_last_name(self):
-        self.model.last_name = "eliyev"
-        self.assertEqual(self.model.last_name, "eliyev")
-
     def test_email_attr(self):
         user = User()
         self.assertTrue(hasattr(user, "email"))

@@ -7,12 +7,12 @@ from models.state import State
 
 class TestState(unittest.TestCase):
     def setUp(self):
-        self.model = User()
+        self.model = State()
         self.model.created_at = datetime.now()
         self.model.updated_at = datetime.now()
 
     def test_id(self):
-        self.model_test = User()
+        self.model_test = State()
         self.assertNotEqual(self.model.id, self.model_test.id)
 
     def test_save(self):
@@ -32,7 +32,7 @@ class TestState(unittest.TestCase):
         expected_str = "[{}] ({}) {}".format(self.model.__class__.__name__, self.model.id, self.model.__dict__)
         self.assertEqual(str(self.model), expected_str)
 
-    def test_first_name_attr(self):
+    def test_name(self):
         state = State()
         self.assertTrue(hasattr(state, "name"))
         self.assertEqual(state.name, "")

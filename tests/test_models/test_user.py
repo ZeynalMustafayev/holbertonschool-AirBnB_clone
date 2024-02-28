@@ -47,3 +47,23 @@ class TestUser(unittest.TestCase):
     def test_last_name(self):
         self.model.last_name = "eliyev"
         self.assertEqual(self.model.last_name, "eliyev")
+
+    def test_email_attr(self):
+        user = User()
+        self.assertTrue(hasattr(user, "email"))
+        self.assertEqual(user.email, "")
+
+    def test_password_attr(self):
+        user = User()
+        self.assertTrue(hasattr(user, "password"))
+        self.assertEqual(user.password, "")
+
+    def test_first_name_attr(self):
+        user = User()
+        self.assertTrue(hasattr(user, "first_name"))
+        self.assertEqual(user.first_name, "")
+
+    def test_last_name_attr(self):
+        user = User()
+        self.assertTrue(hasattr(user, "last_name"))
+        self.assertEqual(user.last_name, "")

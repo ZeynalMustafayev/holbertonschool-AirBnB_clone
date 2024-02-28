@@ -11,6 +11,10 @@ class TestFileStorage(unittest.TestCase):
     def setUp(self):
         self.storage = FileStorage()
 
+    def test_file_path(self):
+        storage = FileStorage()
+        self.assertEqual(storage.__FileStorage__file_path, "file.json")
+
     def test_all(self):
         obj = self.__objects
         self.assertNotEqual(x, self.__objects)

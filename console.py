@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 """Console"""
-import cmd
 from models.base_model import BaseModel
+from models import storage
+import cmd
 import json
 
 
@@ -9,15 +10,18 @@ class HBNBCommand(cmd.Cmd):
     """Hbnb console"""
     prompt = "(hbnb) "
 
+    class_names = ["BaseModel", "User", "State",
+                   "City", "Amenity", "Place", "Review"]
+
     def do_quit(self, line):
         return True
-    
+
     def help_quit(self):
         print("Quit command to exit the program")
-    
+
     def do_EOF(self, line):
         return True
-    
+
     def emptyline(self):
         pass
 
@@ -27,29 +31,42 @@ class HBNBCommand(cmd.Cmd):
                 new_cls = eval(line.split()[0])()
                 new_cls.save()
                 print(new_cls.id)
-            except:
+            except Exception:
                 print("** class doesn't exist **")
         else:
             print("** class name missing **")
 
     def do_show(self, line):
-        if line == "":
+        if not line:
             print("** class name missing **")
             return
-        with open("file.json", "r") as f:
-            for key, value in json.load(f).items():
-                if key.split(".")[0] != line.split()[0]:
-                    print("** class doesn't exist **")
-                    return
-                if len(line.split()) == 1:
-                    print("** instance id missing **")
-                    return
-                if value["id"] != line.split()[1]:
-                    print("** no instance found **")
-                    return
-                value = eval(key.split(".")[0])(**value)
-                print(value)
 
+        parts = line.split()
+
+        if parts[0] not in self.class_names:
+            print("** class doesn't exist **")
+            return
+
+        if len(parts) < 2:
+            print("** instance id missing **")
+            return
+
+        class_name, instance_id = parts[0], parts[1]
+
+        try:
+            with open("file.json", "r") as f:
+                data = json.load(f)
+        except FileNotFoundError:
+            data = {}
+
+        key_to_show = "{}.{}".format(class_name, instance_id)
+
+        if key_to_show not in data:
+            print("** no instance found **")
+            return
+
+        value = eval(key_to_show.split(".")[0])(**data[key_to_show])
+        print(value)
 
     def do_destroy(self, line):
         if not line:
@@ -57,6 +74,11 @@ class HBNBCommand(cmd.Cmd):
             return
 
         parts = line.split()
+
+        if parts[0] not in self.class_names:
+            print("** class doesn't exist **")
+            return
+
         if len(parts) < 2:
             print("** instance id missing **")
             return
@@ -80,9 +102,80 @@ class HBNBCommand(cmd.Cmd):
         with open("file.json", "w") as f:
             json.dump(data, f)
 
+    def do_all(self, line):
+        if not line:
+            try:
+                with open("file.json", "r") as f:
+                    data = json.load(f)
+            except FileNotFoundError:
+                data = {}
+
+            arr = []
+            for k in data.keys():
+                value = eval(k.split(".")[0])(**data[k])
+                arr.append(value.__str__())
+
+            print(arr)
+        else:
+            try:
+                with open("file.json", "r") as f:
+                    data = json.load(f)
+            except FileNotFoundError:
+                data = {}
+
+            arr = []
+            if line not in self.class_names:
+                print("** class doesn't exist **")
+                return
+
+            for k in data.keys():
+                if (k.split(".")[0] == line):
+                    value = eval(k.split(".")[0])(**data[k])
+                    arr.append(value.__str__())
+
+            print(arr)
+
+    def do_update(self, line):
+        if not line:
+            print("** class name missing **")
+            return
+
+        parts = line.split()
+
+        if parts[0] not in self.class_names:
+            print("** class doesn't exist **")
+            return
+        if len(parts) < 2:
+            print("** instance id missing **")
+            return
+        if len(parts) < 3:
+            print("** attribute name missing **")
+            return
+        if len(parts) < 4:
+            print("** value missing **")
+            return
+
+        class_name, id_val, attribute, value = (parts[0], parts[1],
+                                                parts[2], parts[3])
+
+        try:
+            with open("file.json", "r") as f:
+                data = json.load(f)
+        except FileNotFoundError:
+            data = {}
+
+        key_for_find = "{}.{}".format(class_name, id_val)
+        if key_for_find not in data:
+            print("** no instance found **")
+            return
+
+        obj = eval(key_for_find.split(".")[0])(**data[key_for_find])
+        setattr(obj, attribute, value.strip('"'))
+
+        data[key_for_find] = obj.to_dict()
+        with open("file.json", "w") as f:
+            json.dump(data, f)
 
 
-
-    
 if __name__ == '__main__':
     HBNBCommand().cmdloop()

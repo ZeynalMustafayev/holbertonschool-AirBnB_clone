@@ -25,14 +25,10 @@ class BaseModel:
         storage.save()
 
     def to_dict(self):
-        new = {
-            "my_number": self.__dict__.get("my_number"),
-            "name": self.__dict__.get("name"),
-            "__class__": self.__class__.__name__,
-            "updated_at": self.updated_at.isoformat(),
-            "id": self.id,
-            "created_at": self.created_at.isoformat()
-        }
+        new = self.__dict__.copy()
+        new["__class__"] = self.__class__.__name__
+        new["created_at"] = self.created_at.isoformat()
+        new["updated_at"] = self.updated_at.isoformat()
         return new
 
     def __str__(self) -> str:

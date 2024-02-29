@@ -19,17 +19,17 @@ class TestFileStorage(unittest.TestCase):
 
     def test_file_path(self):
         storage = FileStorage()
-        self.assertEqual(storage.__FileStorage__file_path, "file.json")
+        self.assertEqual(storage._FileStorage__file_path, "file.json")
 
     def test_all(self):
         storage = FileStorage()
         storage.reload()
-        self.assertNotEqual(storage.all(), self.__objects)
+        self.assertNotEqual(storage.all(), self.objects)
 
     def test_new(self):
         obj = BaseModel()
         key = f"{type(obj).__name__}.{obj.id}"
-        self.assertEqual(key, "{BaseModel.{}".format(obj.id))
+        self.assertEqual(key, "BaseModel.{}".format(obj.id))
 
     def test_save(self):
         storage = FileStorage()
@@ -44,6 +44,9 @@ class TestFileStorage(unittest.TestCase):
 
     def test_reload(self):
         storage = FileStorage()
-        storage._FileStorage__file_path = self.file_path
+        obj = BaseModel()
+        storage.new(obj)
+        storage.save()
+        storage._FileStorage__objects = {}
         storage.reload()
-        self.assertEqual(storage.all(), self.objects)
+        self.assertIn('BaseModel.' + obj.id, storage.all())

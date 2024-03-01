@@ -2,8 +2,8 @@
 <p align="center">An AirBnB clone.</p>
 
 <p align="center">
-  <img src="https://github.com/ZeynalMustafayev/holbertonschool-AirBnB_clone/blob/master/assets/hbnb_logo.png"
-	    alt="HolbertonBnB logo">
+  <img src="https://github.com/ZeynalMustafayev/holbertonschool-AirBnB_clone/blob/main/assets/hbnb_logo.png"
+	    alt="HolbertonAirBnB logo">
 </p>
 
 ## Description :house:

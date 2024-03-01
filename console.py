@@ -182,6 +182,16 @@ class HBNBCommand(cmd.Cmd):
         with open("file.json", "w") as f:
             json.dump(data, f)
 
+    def default(self, line):
+        tokens = line.split('.')
+        if len(tokens) == 2 and tokens[1] == "all()":
+            class_name = tokens[0]
+            if class_name in self.class_names:
+                self.do_all(class_name)
+            else:
+                print("** class doesn't exist **")
+        else:
+            print("*** Unknown syntax:", line)
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()

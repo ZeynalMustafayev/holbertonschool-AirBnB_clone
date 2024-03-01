@@ -1,4 +1,4 @@
-<h1 align="center">HolbertonBnB</h1>
+<h1 align="center">Holbertonschool-AirBnB_clone</h1>
 <p align="center">An AirBnB clone.</p>
 
 <p align="center">
@@ -20,11 +20,6 @@ deploy in the coming month:
 * Complete integration of a RESTful API
 * Full configuration of website with domain name
 * Serving of dynamic content using JavaScript
-
-<p align="center">
-  <img src="https://github.com/ZeynalMustafayev/AirBnB_clone_v2/blob/master/assets/hbnb_stack.png"
-	    alt="HolbertonBnB stack">
-</p>
 
 ---
 

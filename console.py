@@ -184,10 +184,17 @@ class HBNBCommand(cmd.Cmd):
 
     def default(self, line):
         tokens = line.split('.')
-        if len(tokens) == 2 and tokens[1] == "all()":
+        if len(tokens) == 2:
             class_name = tokens[0]
             if class_name in self.class_names:
-                self.do_all(class_name)
+                if tokens[1] == "all()":
+                    self.do_all(class_name)
+                elif tokens[1] == "count()":
+                    count = 0
+                    for k in storage.all().keys():
+                        if (class_name == k.split(".")[0]):
+                            count += 1
+                    print(count)
             else:
                 print("** class doesn't exist **")
         else:

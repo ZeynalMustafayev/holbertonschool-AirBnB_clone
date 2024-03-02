@@ -195,8 +195,10 @@ class HBNBCommand(cmd.Cmd):
                         if (class_name == k.split(".")[0]):
                             count += 1
                     print(count)
-                
-                elif tokens[1].startswith("show"):
+                elif tokens[1] == "show()":
+                    instance_id = tokens[1].split("(")[1].split(")")[0]
+                    self.do_show(tokens[0] + " " + instance_id)
+                elif tokens[1] == "destroy()":
                     instance_id = tokens[1].split("(")[1].split(")")[0]
                     self.do_show(tokens[0] + " " + instance_id)
             else:

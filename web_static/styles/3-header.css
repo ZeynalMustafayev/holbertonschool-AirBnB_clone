@@ -1,11 +1,10 @@
 header {
     background-color: white;
-    height: 60px;
+    height: 70px;
     width: 100%;
-    position: absolute;
-    bottom: 0;
-    border-bottom: 1px solid #CCCCCC;
+    border-bottom: 1px solid #cccccc;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    background-image: url(../images/logo.png);
+    background-repeat: no-repeat;
+    background-position: 20px;
 }
